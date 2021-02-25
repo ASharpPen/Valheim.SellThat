@@ -6,6 +6,8 @@ namespace Valheim.SellThat
     {
         #region General
 
+        public ConfigEntry<bool> EnableMod { get; set; }
+
         public ConfigEntry<bool> ClearAllExisting { get; set; }
 
         #endregion
@@ -19,7 +21,9 @@ namespace Valheim.SellThat
 
         public void Load(ConfigFile configFile)
         {
-            ClearAllExisting = configFile.Bind("General", "ClearAllExisting", false, "When enabled, all existing items for sales gets removed before adding configured.");
+            EnableMod = configFile.Bind("General", "EnableMod", true, "Kill switch for disabling all mod features.");
+
+            ClearAllExisting = configFile.Bind("General", "ClearAllExisting", true, "When enabled, all existing items for sales gets removed before adding configured.");
 
             DebugMode = configFile.Bind("Debug", "EnableDebug", false, "Enable debug logging.");
 

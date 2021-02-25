@@ -20,6 +20,12 @@ namespace Valheim.SellThat
             Config = new DefaultConfig();
             Config.Load(configFile);
 
+            if(!Config.EnableMod.Value)
+            {
+                Logger.LogInfo("Mod disabled. Stopping.");
+                return;
+            }
+
             string traderConfigPath = Path.Combine(Paths.ConfigPath, "sell_that.selling.cfg");
 
             ConfigFile traderConfig;
