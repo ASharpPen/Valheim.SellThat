@@ -9,24 +9,6 @@ namespace Valheim.SellThat
 {
     public class TraderSellConfigurationLoader
     {
-        public static void WriteToFile(List<Trader.TradeItem> tradeItems)
-        {
-            string filePath = Path.GetFullPath(@".\trader_items.txt");
-            if (SellThatPlugin.Config.DebugMode.Value) Debug.Log($"Writing default trader items to '{filePath}'.");
-
-            var fields = typeof(Trader.TradeItem).GetFields();
-            List<string> lines = new List<string>(tradeItems.Count * fields.Length);
-
-            foreach (var item in tradeItems)
-            {
-                foreach (var field in fields)
-                {
-                    lines.Add($"{field.Name}: {field.GetValue(item)}");
-                }
-            }
-            File.WriteAllLines(filePath, lines);
-        }
-
         public static void InitializeDefault(ConfigFile config)
         {
             config.Bind("HelmetYule", nameof(ItemConfig.Enabled), true);

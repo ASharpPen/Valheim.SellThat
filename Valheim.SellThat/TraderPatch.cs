@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -18,7 +20,7 @@ namespace Valheim.SellThat
 
             if (Config.DumpDefaultTraderItemsToFile.Value)
             {
-                TraderSellConfigurationLoader.WriteToFile(__instance.m_items);
+                WriteToFile(__instance.m_items);
             }
 
             if (Config.ClearAllExisting.Value)
@@ -69,6 +71,24 @@ namespace Valheim.SellThat
                 if (Config.DebugMode.Value) Debug.Log($"[{trader.name}]: Adding item {config.ItemName.Value}.");
                 trader.m_items.Add(item);
             }
+        }
+
+        public static void WriteToFile(List<Trader.TradeItem> tradeItems)
+        {
+            string filePath = Path.GetFullPath(@".\trader_items.txt");
+            if (Config.DebugMode.Value) Debug.Log($"Writing default trader items to '{filePath}'.");
+
+            var fields = typeof(Trader.TradeItem).GetFields();
+            List<string> lines = new List<string>(tradeItems.Count * fields.Length);
+
+            foreach (var item in tradeItems)
+            {
+                foreach (var field in fields)
+                {
+                    lines.Add($"{field.Name}: {field.GetValue(item)}");
+                }
+            }
+            File.WriteAllLines(filePath, lines);
         }
     }
 }
