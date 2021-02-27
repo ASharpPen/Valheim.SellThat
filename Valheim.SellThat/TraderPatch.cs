@@ -60,7 +60,7 @@ namespace Valheim.SellThat
 
         private static void Insert(Trader trader, ItemConfig config, Trader.TradeItem item)
         {
-            if (config.Order.Value >= 0)
+            if (config.Order.Value >= 0 && trader.m_items.Count >= config.Order.Value)
             {
                 if (Config.DebugMode.Value) Debug.Log($"[{trader.name}]: Inserting item {config.ItemName.Value} at index '{config.Order.Value}'.");
 

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Valheim.SellThat
 {
-    [BepInPlugin("asharppen.valheim.sell_that", "Sell That!", "1.0.0")]
+    [BepInPlugin("asharppen.valheim.sell_that", "Sell That!", "1.0.1")]
     public class SellThatPlugin : BaseUnityPlugin
     {
         public static DefaultConfig Config { get; set; }
