@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Valheim.SellThat.Configurations;
 
 namespace Valheim.SellThat
 {
     [HarmonyPatch(typeof(Trader), "Start")]
     public static class ModifyTrader
     {
-        public static DefaultConfig Config => SellThatPlugin.Config;
-        public static TraderSellConfig TraderConfig => SellThatPlugin.TraderConfig;
+        public static GeneralConfig Config => ConfigurationManager.GeneralConfig;
+        public static TraderSellConfig TraderConfig => ConfigurationManager.TraderSellConfig;
 
         private static void Postfix(ref Trader __instance)
         {

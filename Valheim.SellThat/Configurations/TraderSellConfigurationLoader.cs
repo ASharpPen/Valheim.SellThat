@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Valheim.SellThat.ConfigurationCore;
+using Valheim.SellThat.Configurations;
 
 namespace Valheim.SellThat
 {
@@ -69,7 +71,7 @@ namespace Valheim.SellThat
                     {
                         string key = keyValue[0].Trim();
 
-                        if (SellThatPlugin.Config.DebugMode.Value) Debug.Log($"Binding {lastSection}:{key}");
+                        if (ConfigurationManager.GeneralConfig.DebugMode.Value) Log.LogTrace($"Binding {lastSection}:{key}");
 
                         switch (key)
                         {
@@ -105,7 +107,7 @@ namespace Valheim.SellThat
 
             foreach (var item in items)
             {
-                if (SellThatPlugin.Config.DebugMode.Value) Debug.Log(item.Key);
+                if (ConfigurationManager.GeneralConfig.DebugMode.Value) Log.LogTrace(item.Key);
 
                 ItemConfig itemConfig = new ItemConfig
                 {
