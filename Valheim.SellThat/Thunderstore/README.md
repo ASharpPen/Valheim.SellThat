@@ -1,12 +1,10 @@
 ﻿# Sell That!
 
-This mod enables configuration for the traders (Haldor) available wares.
+This mod enables configuration for the traders (Haldor) available wares, as well as what he will buy.
 
 See the [Valheim wiki](https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table) to get a list of item names which can be used.
 
 All changes are done at run-time. Any changes to trader will go back to default if the mod is uninstalled, or the configurations disabled.
-
-This mod does not add support for configuring the selling of items (any item that has value can be sold, modifying the value in item data would allow this).
 
 # Features
 
@@ -14,6 +12,7 @@ This mod does not add support for configuring the selling of items (any item tha
 - Add any new item, with custom price and amount.
 - List of existing items, for easy modification
 - Order items how you want them.
+- Set items that Haldor will buy, at the value of your choice.
 
 # Manual Installation:
 
@@ -86,4 +85,29 @@ Price = 500
 StackSize = 5
 Enabled = true
 
+```
+
+## Trader Buying
+
+'sell_that.buying.cfg'
+
+Trader will buy items that are configured by creating a section as follows:
+
+``` INI
+[<Some-Unique-Section-Name>]
+ItemName = <ItemPrefabName>
+Value = <int>
+
+```
+
+## Example
+
+``` INI
+[Wood One]
+ItemName = Stone
+Price = 20
+
+[Stone Selling]
+ItemName = Wood
+Price = 10
 ```
