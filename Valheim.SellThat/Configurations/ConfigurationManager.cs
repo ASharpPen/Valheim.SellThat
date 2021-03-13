@@ -13,7 +13,7 @@ namespace Valheim.SellThat.Configurations
 
         public static List<TraderBuyingConfig> TraderBuyConfig;
 
-        public static TraderSellConfig TraderSellConfig;
+        public static List<TraderSellConfig> TraderSellConfig;
 
         private const string DefaultTraderBuyConfigFile = "sell_that.buying.cfg";
 
@@ -61,7 +61,7 @@ namespace Valheim.SellThat.Configurations
             return configurations.Values.ToList();
         }
 
-        private static TraderSellConfig LoadSellConfig(string configName)
+        private static List<TraderSellConfig> LoadSellConfig(string configName)
         {
             Log.LogDebug($"Loading trader selling configurations from {configName}.");
 
@@ -74,7 +74,7 @@ namespace Valheim.SellThat.Configurations
 
                 if (GeneralConfig.StopTouchingMyConfigs.Value) traderConfig.SaveOnConfigSet = false;
 
-                TraderSellConfigurationLoader.InitializeDefault(traderConfig);
+                TraderSellDefaults.InitializeDefault(traderConfig);
             }
             else
             {
@@ -83,8 +83,7 @@ namespace Valheim.SellThat.Configurations
                 if (GeneralConfig.StopTouchingMyConfigs.Value) traderConfig.SaveOnConfigSet = false;
             }
 
-            TraderSellConfigurationLoader.ScanBindings(traderConfig);
-            return TraderSellConfigurationLoader.CreateTraderConfigFromBindings(traderConfig);
+            return ConfigurationLoader.LoadConfigurationGroup<TraderSellConfig, ItemConfig>(traderConfig).Values.ToList();
         }
     }
 }

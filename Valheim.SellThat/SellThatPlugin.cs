@@ -6,7 +6,7 @@ using Valheim.SellThat.Configurations;
 
 namespace Valheim.SellThat
 {
-    [BepInPlugin("asharppen.valheim.sell_that", "Sell That!", "1.1.0")]
+    [BepInPlugin("asharppen.valheim.sell_that", "Sell That!", "1.2.0")]
     public class SellThatPlugin : BaseUnityPlugin
     {
         void Awake()

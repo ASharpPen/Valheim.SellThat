@@ -7,14 +7,18 @@ namespace Valheim.SellThat.Patches
     [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.OnWorldStart))]
     public static class WorldStartPatch
     {
-        private static void Postfix(ref FejdStartup __instance)
+        private static void Postfix()
         {
-            //Quick'n'dirty cleanup for now.
-            SellableItemsPatch.Buying = null;
-            SellItemPatch.Buying = null;
+            //If singleplayer, ZNet will not be initialized here.
+            if (ZNet.instance == null)
+            {
+                //Quick'n'dirty cleanup for now.
+                SellableItemsPatch.Buying = null;
+                SellItemPatch.Buying = null;
 
-            Log.LogDebug("World startet. Loading trader configurations.");
-            ConfigurationManager.LoadAllConfigurations();
+                Log.LogDebug("World startet. Loading trader configurations.");
+                ConfigurationManager.LoadAllConfigurations();
+            }
         }
     }
 }
