@@ -1,24 +1,22 @@
 ﻿using BepInEx.Configuration;
+using System;
 using System.Collections.Generic;
+using Valheim.SellThat.ConfigurationCore;
 
 namespace Valheim.SellThat
 {
-    public class TraderSellConfig
+    [Serializable]
+    public class TraderSellConfig : ConfigurationGroup<ItemConfig>
     {
-        public List<ItemConfig> Items { get; set; } = new List<ItemConfig>();
-    }
+        public ConfigurationEntry<bool> Enabled = new ConfigurationEntry<bool>(true, "Enable/disable this section.");
 
-    public class ItemConfig
-    {
-        public ConfigEntry<bool> Enabled { get; set; }
+        public ConfigurationEntry<int> Order = new ConfigurationEntry<int>(-1, "Where to attempt to put item in traders list. Smaller is higher, -1 means at the end.");
 
-        public ConfigEntry<int> Order { get; set; }
+        public ConfigurationEntry<string> ItemName = new ConfigurationEntry<string>("", "Item prefab name for trader to sell.");
 
-        public ConfigEntry<string> ItemName { get; set; }
+        public ConfigurationEntry<int> StackSize = new ConfigurationEntry<int>(1, "Number of items to sell at a time.");
 
-        public ConfigEntry<int> StackSize { get; set; }
-
-        public ConfigEntry<int> Price { get; set; }
+        public ConfigurationEntry<int> Price = new ConfigurationEntry<int>(1, "Price to buy this item.");
 
         public bool IsValid()
         {
@@ -44,5 +42,10 @@ namespace Valheim.SellThat
 
             return true;
         }
+    }
+
+    [Serializable]
+    public class ItemConfig : ConfigurationSection
+    {
     }
 }
