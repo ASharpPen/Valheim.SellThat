@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Valheim.SellThat.ConfigurationCore;
 using Valheim.SellThat.Configurations;
 
 namespace Valheim.SellThat
@@ -11,12 +12,13 @@ namespace Valheim.SellThat
     public static class ModifyTrader
     {
         public static GeneralConfig Config => ConfigurationManager.GeneralConfig;
-        public static TraderSellConfig TraderConfig => ConfigurationManager.TraderSellConfig;
+        public static List<TraderSellConfig> TraderConfig => ConfigurationManager.TraderSellConfig;
 
-        private static void Postfix(ref Trader __instance)
+        private static void Postfix(Trader __instance)
         {
             string name = __instance.gameObject.name;
-            if (Config.DebugMode.Value) Debug.Log($"[{__instance.name}]: Modifying trade items.");
+            
+            Log.LogDebug($"[{__instance.name}]: Modifying trade items.");
 
 
             if (Config.DumpDefaultTraderItemsToFile.Value)
@@ -26,11 +28,11 @@ namespace Valheim.SellThat
 
             if (Config.ClearAllExisting.Value)
             {
-                if (Config.DebugMode.Value) Debug.Log($"[{__instance.name}]: Clearing existing {__instance.m_items.Count} items.");
+                Log.LogDebug($"[{__instance.name}]: Clearing existing {__instance.m_items.Count} items.");
                 __instance.m_items.Clear();
             }
 
-            foreach (var itemConfig in TraderConfig.Items.OrderBy(x => x.Order.Value))
+            foreach (var itemConfig in TraderConfig.OrderBy(x => x.Order.Value))
             {
                 //Sanity checks
                 if (itemConfig == null || !itemConfig.IsValid())
@@ -44,7 +46,7 @@ namespace Valheim.SellThat
 
                 if (itemDrop == null)
                 {
-                    Debug.LogWarning($"Couldn't find item '{itemConfig.ItemName}'");
+                    Log.LogWarning($"Couldn't find item '{itemConfig.ItemName}'");
                     continue;
                 }
 
@@ -59,17 +61,17 @@ namespace Valheim.SellThat
             }
         }
 
-        private static void Insert(Trader trader, ItemConfig config, Trader.TradeItem item)
+        private static void Insert(Trader trader, TraderSellConfig config, Trader.TradeItem item)
         {
             if (config.Order.Value >= 0 && trader.m_items.Count >= config.Order.Value)
             {
-                if (Config.DebugMode.Value) Debug.Log($"[{trader.name}]: Inserting item {config.ItemName.Value} at index '{config.Order.Value}'.");
+                Log.LogTrace($"[{trader.name}]: Inserting item {config.ItemName.Value} at index '{config.Order.Value}'.");
 
                 trader.m_items.Insert(config.Order.Value, item);
             }
             else
             {
-                if (Config.DebugMode.Value) Debug.Log($"[{trader.name}]: Adding item {config.ItemName.Value}.");
+                Log.LogTrace($"[{trader.name}]: Adding item {config.ItemName.Value}.");
                 trader.m_items.Add(item);
             }
         }
@@ -77,7 +79,8 @@ namespace Valheim.SellThat
         public static void WriteToFile(List<Trader.TradeItem> tradeItems)
         {
             string filePath = Path.GetFullPath(@".\trader_items.txt");
-            if (Config.DebugMode.Value) Debug.Log($"Writing default trader items to '{filePath}'.");
+
+            Log.LogInfo($"Writing default trader items to '{filePath}'.");
 
             var fields = typeof(Trader.TradeItem).GetFields();
             List<string> lines = new List<string>(tradeItems.Count * fields.Length);
