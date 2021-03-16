@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Valheim.SellThat.ConfigurationCore;
 using Valheim.SellThat.Configurations;
+using Valheim.SellThat.TraderFeatures.TraderBuy;
 
 namespace Valheim.SellThat.Patches
 {
@@ -13,8 +14,8 @@ namespace Valheim.SellThat.Patches
             if (ZNet.instance == null)
             {
                 //Quick'n'dirty cleanup for now.
-                SellableItemsPatch.Buying = null;
-                SellItemPatch.Buying = null;
+                GetSellableItemsPatch.Buying = null;
+                SetItemValuePatch.Buying = null;
 
                 Log.LogDebug("World startet. Loading trader configurations.");
                 ConfigurationManager.LoadAllConfigurations();

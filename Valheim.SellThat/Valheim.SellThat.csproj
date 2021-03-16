@@ -34,6 +34,10 @@
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\Valheim\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="assembly_guiutils, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Games\Steam\steamapps\common\Valheim\valheim_Data\Managed\assembly_guiutils.dll</HintPath>
+    </Reference>
     <Reference Include="assembly_utils, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Games\Steam\steamapps\common\Valheim\valheim_Data\Managed\assembly_utils.dll</HintPath>
@@ -58,8 +62,15 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Games\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="TraderFeatures\StoreCache.cs" />
+    <Compile Include="TraderFeatures\TraderSell\SellConditionChecker.cs" />
     <Compile Include="ConfigurationCore\ConfigurationEntry.cs" />
     <Compile Include="ConfigurationCore\ConfigurationGroup.cs" />
     <Compile Include="ConfigurationCore\ConfigurationLoader.cs" />
@@ -70,15 +81,20 @@
     <Compile Include="Configurations\TraderBuyingConfig.cs" />
     <Compile Include="Multiplayer\ConfigMultiplayerPatch.cs" />
     <Compile Include="Multiplayer\ConfigurationPackage.cs" />
-    <Compile Include="Patches\SellItemPatch.cs" />
+    <Compile Include="TraderFeatures\TraderBuy\SetItemValuePatch.cs" />
     <Compile Include="Patches\WorldStartPatch.cs" />
     <Compile Include="Configurations\GeneralConfig.cs" />
-    <Compile Include="Patches\SellableItemsPatch.cs" />
+    <Compile Include="TraderFeatures\TraderBuy\GetSellableItemsPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SellThatPlugin.cs" />
-    <Compile Include="Patches\TraderPatch.cs" />
+    <Compile Include="TraderFeatures\TraderSell\StoreItemsPatch.cs" />
+    <Compile Include="TraderFeatures\TraderSell\RecordTraderDefaultsPatch.cs" />
     <Compile Include="Configurations\TraderSellConfig.cs" />
     <Compile Include="Configurations\TraderSellDefaults.cs" />
+    <Compile Include="TraderFeatures\TraderSell\SellLimitter.cs" />
+    <Compile Include="TraderFeatures\TraderCache.cs" />
+    <Compile Include="TraderFeatures\StoreState.cs" />
+    <Compile Include="TraderFeatures\TraderSell\StoreRefresher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Thunderstore\manifest.json" />

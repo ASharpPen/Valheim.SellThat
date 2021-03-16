@@ -17,6 +17,12 @@ namespace Valheim.SellThat
 
         #endregion
 
+        #region Trader
+
+        public ConfigurationEntry<int> DaysToRefresh = new ConfigurationEntry<int>(-1, "Set a number of days between trader refreshing his wares.");
+
+        #endregion
+
         #region Debug
         public ConfigurationEntry<bool> DebugMode = new ConfigurationEntry<bool>(false, "Enable debug logging.");
 
@@ -31,6 +37,8 @@ namespace Valheim.SellThat
             EnableTraceLogging.Bind(configFile, "Debug", "EnableTrace");
             DebugMode.Bind(configFile, "Debug", "EnableDebug");
             DumpDefaultTraderItemsToFile.Bind(configFile, "Debug", "DumpDefaultTraderItemsToFile");
+
+            DaysToRefresh.Bind(configFile, "Trader", nameof(DaysToRefresh));
 
             StopTouchingMyConfigs.Bind(configFile, "General", nameof(StopTouchingMyConfigs));
             ClearAllExisting.Bind(configFile, "General", "ClearAllExisting");

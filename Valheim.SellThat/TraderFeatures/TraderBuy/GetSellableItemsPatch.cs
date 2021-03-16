@@ -9,41 +9,26 @@ using System.Threading.Tasks;
 using Valheim.SellThat.ConfigurationCore;
 using Valheim.SellThat.Configurations;
 
-namespace Valheim.SellThat.Patches
+namespace Valheim.SellThat.TraderFeatures.TraderBuy
 {
-    [HarmonyPatch(typeof(StoreGui), "GetSellableItem")]
-    public static class SellableItemsPatch
+    [HarmonyPatch(typeof(StoreGui))]
+    public static class GetSellableItemsPatch
     {
         private static MethodInfo GetValuableItemsAnchor = AccessTools.Method(typeof(Inventory), "GetValuableItems", new Type[] { typeof(List<ItemDrop.ItemData>)});
-        private static MethodInfo CustomSellables = AccessTools.Method(typeof(SellableItemsPatch), nameof(SellableItemsDetour), new Type[] { typeof(Inventory), typeof(List<ItemDrop.ItemData>), typeof(StoreGui) });
-
-        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            var resultInstructions = new List<CodeInstruction>();
-            var codes = instructions.ToList();
-
-            for(int i = 0; i < codes.Count; ++i)
-            {
-                var curCode = codes[i];
-
-                if(curCode.opcode == OpCodes.Callvirt && curCode.OperandIs(GetValuableItemsAnchor))
-                {
-                    Log.LogDebug($"Identified anchor {curCode}");
-                    Log.LogDebug($"Replacing with custom detour for adding sellable items.");
-
-                    resultInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
-                    resultInstructions.Add(new CodeInstruction(OpCodes.Callvirt, CustomSellables));
-                }
-                else
-                {
-                    resultInstructions.Add(curCode);
-                }
-            }
-            
-            return resultInstructions;
-        }
+        private static MethodInfo CustomSellables = AccessTools.Method(typeof(GetSellableItemsPatch), nameof(SellableItemsDetour), new Type[] { typeof(Inventory), typeof(List<ItemDrop.ItemData>), typeof(StoreGui) });
 
         public static Dictionary<string, TraderBuyingConfig> Buying = null;
+
+        [HarmonyPatch("GetSellableItem")]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> RerouteSellableItemSearch(IEnumerable<CodeInstruction> instructions)
+        {
+            return new CodeMatcher(instructions)
+                .MatchForward(false, new CodeMatch(OpCodes.Callvirt, GetValuableItemsAnchor))
+                .SetInstruction(new CodeInstruction(OpCodes.Ldarg_0))
+                .InsertAndAdvance(new CodeInstruction(OpCodes.Callvirt, CustomSellables))
+                .InstructionEnumeration();
+        }
 
         private static void SellableItemsDetour(Inventory inventory, List<ItemDrop.ItemData> sellableItems, StoreGui storeGui)
         {
